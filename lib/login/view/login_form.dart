@@ -166,9 +166,7 @@ class _TwitterLoginButton extends StatelessWidget {
         await context
             .read<LoginCubit>()
             .logInWithTwitter(_userInfo?.oauthtoken ?? '', test);
-        //Navigator.of(context).push(TwitterLoginWebView(_authPage));
       },
-      //onPressed: () => context.read<LoginCubit>().logInWithTwitter(),
     );
   }
 }

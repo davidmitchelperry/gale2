@@ -1,1 +1,1 @@
-export 'twitterUserInfo.dart';
+export 'twitter_user_info.dart';

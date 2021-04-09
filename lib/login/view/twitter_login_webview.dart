@@ -8,12 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class TwitterLoginWebView extends StatelessWidget {
   TwitterLoginWebView(this.authorizationPage);
 
-  //static Route route(String authorizationPage) {
-  //  return MaterialPageRoute<void>(builder: (_) {
-  //    return TwitterLoginWebView(authorizationPage);
-  //  });
-  //}
-
   final String authorizationPage;
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
@@ -25,8 +19,6 @@ class TwitterLoginWebView extends StatelessWidget {
       javascriptMode: JavascriptMode.unrestricted,
       onWebViewCreated: _controller.complete,
       navigationDelegate: (NavigationRequest request) {
-        //Navigator.of(context).push<
-        //print('allowing navigation to $request');
         return NavigationDecision.navigate;
       },
       onPageStarted: (String url) {
@@ -40,14 +32,6 @@ class TwitterLoginWebView extends StatelessWidget {
           final oauthVerifier = queryParameters['oauth_verifier'];
           Navigator.of(context).pop<TwitterUserInfo>(
               TwitterUserInfo(oauthToken ?? '', oauthVerifier ?? ''));
-          //Navigator.of(context).pop();
-          //print('oauthtoken: ${oauthToken}, oauthverifier: ${oauthVerifier}');
-          //print("*****");
-          //print(context.read<LoginCubit>());
-          //print("*****");
-          //context
-          //    .read<LoginCubit>()
-          //    .logInWithTwitter(oauthToken ?? "", oauthVerifier ?? "");
         }
       },
       gestureNavigationEnabled: true,
