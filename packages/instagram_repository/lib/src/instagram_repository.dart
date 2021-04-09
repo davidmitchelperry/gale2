@@ -39,7 +39,7 @@ class InstagramRepository {
   List<InstaMedia>? medias;
 
   // TODO: int get/set authorizationCode
-  void getAuthorizationCode(String url) {
+  void setAuthorizationCode(String url) {
     /// Parsing the code from string url.
     authorizationCode =
         url.replaceAll('${redirectUri}?code=', '').replaceAll('#_', '');

@@ -1,57 +1,55 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_firebase_login/instagram/bloc/bloc.dart';
 //import 'package:gale/instagram/instagram.dart';
 
 import 'package:instagram_repository/instagram_repository.dart';
 
 part 'instagram_event.dart';
+
 part 'instagram_state.dart';
 
 class InstagramBloc extends Bloc<InstagramEvent, InstagramState> {
-  final InstagramRepository instagramRepository;
-
   InstagramBloc({
     required InstagramRepository instagramRepository,
   })   : assert(instagramRepository != null),
         instagramRepository = instagramRepository,
-        super(InstagramInit(instagramRepository.helloWorld()));
-
-  //final ProfileRepository _profileRepository;
-  //InstagramBloc({
-  //  @required ProfileRepository profileRepository,
-  //  @required AuthenticationRepository authenticationRepository,
-  //})  : assert(profileRepository != null),
-  //      _profileRepository = profileRepository,
-  //      super(ProfileInit());
+        super(InstagramInit());
+  final InstagramRepository instagramRepository;
 
   @override
   Stream<InstagramState> mapEventToState(InstagramEvent event) async* {
-    //if (event is LoadProfile) {
-    //  yield* _mapLoadProfileToState(event);
-    //} else if (event is LoadProfileComplete) {
-    //  yield* _mapLoadProfileCompleteToState(event);
-    //}
+    if (event is LoadInstagram) {
+      yield* _mapLoadInstagramToState(event);
+    } else if (event is InstagramLoadComplete) {
+      yield* _mapInstagramLoadCompleteToState(event);
+    }
   }
 
-  //Stream<InstagramState> _mapLoadProfileToState(LoadProfile event) async* {
-  //  //yield ProfileLoading(event.userid);
-  //  //_profileRepository.readProfile(event.userid).then((Profile profile) {
-  //  //  add(LoadProfileComplete(event.userid, profile));
-  //  //}, onError: (e) {});
-  //}
+  Stream<InstagramState> _mapLoadInstagramToState(LoadInstagram event) async* {
+    yield InstagramLoading(event.url);
+    instagramRepository.setAuthorizationCode(event.url);
+    await instagramRepository.getTokenAndUserID().then((isDone) async {
+      //print("ACCESS TOKEN: " + (instagram.accessToken ?? "null"));
+      List<String> mediasUrls = [];
+      if (isDone) {
+        await instagramRepository.getUserProfile().then((isDone) async {
+          await instagramRepository.getAllMedias().then((mds) async {
+            //var medias = mds;
+            for (var media in mds) {
+              //print(media.url);
+              mediasUrls.add(media.url ?? '');
+            }
+            add(InstagramLoadComplete(event.url, mediasUrls));
+          });
+        });
+      }
+    });
+  }
 
-  //Stream<InstagramState> _mapLoadProfileCompleteToState(
-  //    LoadProfileComplete event) async* {
-  //  yield ProfileLoaded(event.userid, event.profile);
-  //}
-
-//Stream<InstagramState> _mapCreateProfileToState(CreateProfile event) async* {
-//  _profileRepository.createNewProfile(event.profile, event.user);
-//}
-
-//Stream<InstagramState> _mapUpdateProfileToState(UpdateProfile event) async* {
-//  _profileRepository.updateProfile(event.profile, event.user);
-//}
-
+  Stream<InstagramState> _mapInstagramLoadCompleteToState(
+      InstagramLoadComplete event) async* {
+    yield InstagramLoaded(event.url, event.mediasUrls);
+  }
 }

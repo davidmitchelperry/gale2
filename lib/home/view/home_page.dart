@@ -13,6 +13,16 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    final instagramState =
+        context.select((InstagramBloc bloc) => bloc.state); // INIT THE WEBVIEW
+    late final List<String> mediasUrls;
+    if (instagramState is InstagramInit) {
+      mediasUrls = [];
+    } else if (instagramState is InstagramLoading) {
+      mediasUrls = [];
+    } else if (instagramState is InstagramLoaded) {
+      mediasUrls = instagramState.mediaUrls;
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -48,6 +58,7 @@ class HomePage extends StatelessWidget {
                     InstagramWebView.route(),
                   );
                 }),
+            Text(mediasUrls.toString()),
           ],
         ),
       ),

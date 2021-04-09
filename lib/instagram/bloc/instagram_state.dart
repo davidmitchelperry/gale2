@@ -1,31 +1,14 @@
 part of 'instagram_bloc.dart';
 
 abstract class InstagramState extends Equatable {
-  final String helloWorld;
-
-  const InstagramState(this.helloWorld);
+  const InstagramState();
 
   @override
   List<Object> get props => [];
 }
 
 class InstagramInit extends InstagramState {
-  final String helloWorld;
-
-  const InstagramInit(this.helloWorld) : super(helloWorld);
-
-  @override
-  List<Object> get props => [];
-
-  @override
-  String toString() => 'InstagramInit { }';
-}
-
-class InstagramAtConsentScreen extends InstagramState {
-  final String helloWorld;
-
-  const InstagramAtConsentScreen(this.helloWorld) : super(helloWorld);
-
+  const InstagramInit();
   @override
   List<Object> get props => [];
 
@@ -34,25 +17,27 @@ class InstagramAtConsentScreen extends InstagramState {
 }
 
 class InstagramLoading extends InstagramState {
-  final String helloWorld;
-
-  const InstagramLoading(this.helloWorld) : super(helloWorld);
+  const InstagramLoading(this.url);
+  final String url;
+  @override
+  List<Object> get props => [url];
 
   @override
-  List<Object> get props => [];
-
-  @override
-  String toString() => 'InstagramLoading {}';
+  String toString() => 'InstagramLoading { url: $url }';
 }
 
 class InstagramLoaded extends InstagramState {
-  final String helloWorld;
+  const InstagramLoaded(
+    this.url,
+    this.mediaUrls,
+  );
 
-  const InstagramLoaded(this.helloWorld) : super(helloWorld);
+  final String url;
+  final List<String> mediaUrls;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [url, mediaUrls];
 
   @override
-  String toString() => 'InstagramLoaded {}';
+  String toString() => 'InstagramLoaded { url: $url, mediaUrls: $mediaUrls }';
 }
