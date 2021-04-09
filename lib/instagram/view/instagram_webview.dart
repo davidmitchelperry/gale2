@@ -40,27 +40,15 @@ class InstagramWebView extends StatelessWidget {
         if (url.startsWith('https://www.davidmitchelperry.com/auth/')) {
           instagram.getAuthorizationCode(url);
           await instagram.getTokenAndUserID().then((isDone) async {
-            print("ACCESS TOKEN: " + (instagram.accessToken ?? "null"));
+            //print("ACCESS TOKEN: " + (instagram.accessToken ?? "null"));
             if (isDone) {
               await instagram.getUserProfile().then((isDone) async {
                 await instagram.getAllMedias().then((mds) async {
-                  var medias = mds; // NOW WE CAN CLOSE THE WEBVIEW
-                  medias.forEach((media) {
+                  //var medias = mds;
+                  for (var media in mds) {
                     print(media.url);
-                  });
+                  }
                   Navigator.of(context).pop();
-                  //Navigator.of(context)
-                  //    .push(MaterialPageRoute(builder: (BuildContext ctx) {
-                  //  // ADDING OUR SELECTION PAGE
-                  //  return InstagramSelectionPage(
-                  //    medias: medias,
-                  //    onPressedConfirmation: () {
-                  //      // RETURNING AFTER SELECTION OUR MEDIAS LIST
-                  //      Navigator.of(ctx).pop();
-                  //      Navigator.of(context).pop(medias);
-                  //    },
-                  //  );
-                  //}));
                 });
               });
             }

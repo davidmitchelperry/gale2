@@ -46,17 +46,17 @@ class InstagramRepository {
   }
 
   Future<bool> getTokenAndUserID() async {
-    var url = Uri.parse("https://api.instagram.com/oauth/access_token");
+    var url = Uri.parse('https://api.instagram.com/oauth/access_token');
 
     /// Request token.
     /// Set token.
     /// Returning status request as bool.
-    final http.Response response = await http.post(url, body: {
-      "client_id": clientID,
-      "redirect_uri": redirectUri,
-      "client_secret": appSecret,
-      "code": authorizationCode,
-      "grant_type": "authorization_code"
+    final response = await http.post(url, body: {
+      'client_id': clientID,
+      'redirect_uri': redirectUri,
+      'client_secret': appSecret,
+      'code': authorizationCode,
+      'grant_type': 'authorization_code'
     });
     accessToken = json.decode(response.body)['access_token'].toString();
     userID = json.decode(response.body)['user_id'].toString();
@@ -68,9 +68,9 @@ class InstagramRepository {
     /// Request instagram user profile.
     /// Set profile.
     /// Returning status request as bool.
-    final String fields = userFields.join(',');
-    final http.Response responseNode = await http.get(Uri.parse(
-        'https://graph.instagram.com/${userID}?fields=${fields}&access_token=${accessToken}'));
+    final fields = userFields.join(',');
+    final responseNode = await http.get(Uri.parse(
+        'https://graph.instagram.com/$userID?fields=$fields&access_token=$accessToken'));
     instaProfile = {
       'id': json.decode(responseNode.body)['id'].toString(),
       'username': json.decode(responseNode.body)['username'].toString(),
@@ -84,50 +84,24 @@ class InstagramRepository {
     /// Request for each media id the details.
     /// Set all medias as list Object.
     /// Returning the List<InstaMedia>.
-    final String fields = mediasListFields.join(',');
-    final http.Response responseMedia = await http.get(Uri.parse(
-        'https://graph.instagram.com/${userID}/media?fields=${fields}&access_token=${accessToken}'));
+    final fields = mediasListFields.join(',');
+    final responseMedia = await http.get(Uri.parse(
+        'https://graph.instagram.com/$userID/media?fields=$fields&access_token=$accessToken'));
     final dynamic mediasList = json.decode(responseMedia.body);
     List<InstaMedia> medias = [];
-    await mediasList['data'].forEach((dynamic media) async {
-      // check inside db if exists (optional)
-      //Map<String, dynamic> m = await getMediaDetails(media['id']);
+    for (var media in mediasList['data']) {
       dynamic m = await getMediaDetails(media['id'] as String);
       InstaMedia instaMedia = InstaMedia(m as Map<String, dynamic>);
       medias.add(instaMedia);
-    });
-    // need delay before returning the List<InstaMedia>
-    await Future.delayed(Duration(seconds: 1), () {});
+    }
     return medias;
   }
-
-  //Future<List<InstaMedia>> getAllMedias() async {
-  //  /// Parse according fieldsList.
-  //  /// Request instagram user medias list.
-  //  /// Request for each media id the details.
-  //  /// Set all medias as list Object.
-  //  /// Returning the List<InstaMedia>.
-  //  final String fields = mediasListFields.join(',');
-  //  final http.Response responseMedia = await http.get(Uri.parse(
-  //      'https://graph.instagram.com/${userID}/media?fields=${fields}&access_token=${accessToken}'));
-  //  var mediasList = json.decode(responseMedia.body) as Map<String, dynamic>;
-  //  List<InstaMedia> medias = [];
-  //  await mediasList['data']?.forEach((Map<String, String> data) async {
-  //    // check inside db if exists (optional)
-  //    var m = await getMediaDetails(data['id']);
-  //    var instaMedia = InstaMedia(m);
-  //    medias.add(instaMedia);
-  //  });
-  //  // need delay before returning the List<InstaMedia>
-  //  await Future.delayed(Duration(seconds: 1), () {});
-  //  return medias;
-  //}
 
   Future<Map<String, dynamic>> getMediaDetails(String? mediaID) async {
     /// Parse according fieldsList.
     /// Request complete media informations.
     /// Returning the response as Map<String, dynamic>
-    final String fields = mediaFields.join(',');
+    final fields = mediaFields.join(',');
     final responseMediaSingle = await http.get(Uri.parse(
         'https://graph.instagram.com/$mediaID?fields=$fields&access_token=$accessToken'));
     return json.decode(responseMediaSingle.body) as Map<String, dynamic>;
