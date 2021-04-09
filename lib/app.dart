@@ -1,4 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter_firebase_login/instagram/bloc/bloc.dart';
+import 'package:instagram_repository/instagram_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
@@ -11,19 +13,35 @@ class App extends StatelessWidget {
   const App({
     Key? key,
     required this.authenticationRepository,
+    required this.instagramRepository,
   })   : assert(authenticationRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
+  final InstagramRepository instagramRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: authenticationRepository,
         ),
+        RepositoryProvider.value(
+          value: instagramRepository,
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationBloc>(
+              create: (_) => AuthenticationBloc(
+                    authenticationRepository: authenticationRepository,
+                  )),
+          BlocProvider<InstagramBloc>(
+              create: (_) => InstagramBloc(
+                    instagramRepository: instagramRepository,
+                  )),
+        ],
         child: AppView(),
       ),
     );

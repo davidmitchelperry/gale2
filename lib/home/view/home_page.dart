@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
 import 'package:flutter_firebase_login/home/home.dart';
+import 'package:flutter_firebase_login/instagram/instagram.dart';
 
 class HomePage extends StatelessWidget {
   static Route route() {
@@ -35,6 +36,18 @@ class HomePage extends StatelessWidget {
             Text(user.email, style: textTheme.headline6),
             const SizedBox(height: 4.0),
             Text(user.name ?? '', style: textTheme.headline5),
+            RaisedButton(
+                key: const Key('RB_gotoInstagram'),
+                child: const Text('Goto Instagram'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: const Color(0xFFFFD600),
+                onPressed: () {
+                  Navigator.of(context).push<void>(
+                    InstagramWebView.route(),
+                  );
+                }),
           ],
         ),
       ),
