@@ -23,6 +23,7 @@ class InstagramWebView extends StatelessWidget {
       listener: (context, state) {
         if (state is InstagramLoaded) {
           Navigator.of(context).pop();
+          Navigator.of(context).push<void>(InstagramMediaView.route());
         }
       },
       child: WebView(
