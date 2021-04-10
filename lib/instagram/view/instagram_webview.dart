@@ -19,6 +19,7 @@ class InstagramWebView extends StatelessWidget {
   Widget build(BuildContext context) {
     final instagramState =
         context.select((InstagramBloc bloc) => bloc.state); // INIT THE WEBVIEW
+    late final Widget newWidget;
     return BlocListener<InstagramBloc, InstagramState>(
       listener: (context, state) {
         if (state is InstagramLoaded) {
@@ -39,8 +40,7 @@ class InstagramWebView extends StatelessWidget {
         onPageFinished: (String url) async {
           print('Page finished loading: $url');
           if (url.startsWith('https://www.davidmitchelperry.com/auth/')) {
-            LoadInstagram(url);
-            context.read<InstagramBloc>().add(LoadInstagram(url));
+            context.read<InstagramBloc>().add(LoadInstagramMedia(url));
           }
         },
         gestureNavigationEnabled: true,

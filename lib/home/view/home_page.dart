@@ -16,12 +16,20 @@ class HomePage extends StatelessWidget {
     final instagramState =
         context.select((InstagramBloc bloc) => bloc.state); // INIT THE WEBVIEW
     late final List<String> mediasUrls;
+    late final bool hasValidToken;
     if (instagramState is InstagramInit) {
       mediasUrls = [];
+      hasValidToken = false;
     } else if (instagramState is InstagramLoading) {
       mediasUrls = [];
+      hasValidToken = false;
     } else if (instagramState is InstagramLoaded) {
       mediasUrls = instagramState.mediaUrls;
+      if (DateTime.now().isBefore(instagramState.tokenExpirationTime)) {
+        hasValidToken = true;
+      } else {
+        hasValidToken = false;
+      }
     }
     return Scaffold(
       appBar: AppBar(
@@ -54,9 +62,15 @@ class HomePage extends StatelessWidget {
                 ),
                 color: const Color(0xFFFFD600),
                 onPressed: () {
-                  Navigator.of(context).push<void>(
-                    InstagramWebView.route(),
-                  );
+                  if (hasValidToken) {
+                    Navigator.of(context).push<void>(
+                      InstagramMediaView.route(),
+                    );
+                  } else {
+                    Navigator.of(context).push<void>(
+                      InstagramWebView.route(),
+                    );
+                  }
                 }),
             Text(mediasUrls.toString()),
           ],

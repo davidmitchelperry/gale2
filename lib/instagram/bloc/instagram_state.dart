@@ -30,10 +30,12 @@ class InstagramLoaded extends InstagramState {
   const InstagramLoaded(
     this.url,
     this.mediaUrls,
+    this.tokenExpirationTime,
   );
 
   final String url;
   final List<String> mediaUrls;
+  final DateTime tokenExpirationTime;
 
   @override
   List<Object> get props => [url, mediaUrls];

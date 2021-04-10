@@ -20,19 +20,25 @@ class InstagramBloc extends Bloc<InstagramEvent, InstagramState> {
 
   @override
   Stream<InstagramState> mapEventToState(InstagramEvent event) async* {
-    if (event is LoadInstagram) {
-      yield* _mapLoadInstagramToState(event);
-    } else if (event is InstagramLoadComplete) {
-      yield* _mapInstagramLoadCompleteToState(event);
+    if (event is LoadInstagramAccessToken) {
+    } else if (event is LoadInstagramMedia) {
+      yield* _mapLoadInstagramMediaToState(event);
+    } else if (event is LoadInstagramMediaComplete) {
+      yield* _mapLoadInstagramMediaCompleteToState(event);
+    } else if (event is LoadInstagramAccessToken) {
+      yield* _mapLoadInstagramAccessTokenToState(event);
     }
   }
 
-  Stream<InstagramState> _mapLoadInstagramToState(LoadInstagram event) async* {
+  Stream<InstagramState> _mapLoadInstagramAccessTokenToState(
+      LoadInstagramAccessToken event) async* {}
+
+  Stream<InstagramState> _mapLoadInstagramMediaToState(
+      LoadInstagramMedia event) async* {
     yield InstagramLoading(event.url);
+    List<String> mediasUrls = [];
     instagramRepository.setAuthorizationCode(event.url);
     await instagramRepository.getTokenAndUserID().then((isDone) async {
-      //print("ACCESS TOKEN: " + (instagram.accessToken ?? "null"));
-      List<String> mediasUrls = [];
       if (isDone) {
         await instagramRepository.getUserProfile().then((isDone) async {
           await instagramRepository.getAllMedias().then((mds) async {
@@ -41,15 +47,23 @@ class InstagramBloc extends Bloc<InstagramEvent, InstagramState> {
               //print(media.url);
               mediasUrls.add(media.url ?? '');
             }
-            add(InstagramLoadComplete(event.url, mediasUrls));
+            add(LoadInstagramMediaComplete(
+              event.url,
+              mediasUrls,
+              instagramRepository.accessTokenExpirationTime!,
+            ));
           });
         });
       }
     });
   }
 
-  Stream<InstagramState> _mapInstagramLoadCompleteToState(
-      InstagramLoadComplete event) async* {
-    yield InstagramLoaded(event.url, event.mediasUrls);
+  Stream<InstagramState> _mapLoadInstagramMediaCompleteToState(
+      LoadInstagramMediaComplete event) async* {
+    yield InstagramLoaded(
+      event.url,
+      event.mediasUrls,
+      event.tokenExpirationTime,
+    );
   }
 }

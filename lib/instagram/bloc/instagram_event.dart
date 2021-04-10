@@ -6,17 +6,28 @@ abstract class InstagramEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadInstagram extends InstagramEvent {
-  const LoadInstagram(this.url);
+class LoadInstagramAccessToken extends InstagramEvent {
+  const LoadInstagramAccessToken();
+  @override
+  List<Object> get props => [];
+}
+
+class LoadInstagramMedia extends InstagramEvent {
+  const LoadInstagramMedia(this.url);
   final String url;
   @override
   List<Object> get props => [url];
 }
 
-class InstagramLoadComplete extends InstagramEvent {
-  const InstagramLoadComplete(this.url, this.mediasUrls);
+class LoadInstagramMediaComplete extends InstagramEvent {
+  const LoadInstagramMediaComplete(
+    this.url,
+    this.mediasUrls,
+    this.tokenExpirationTime,
+  );
   final String url;
   final List<String> mediasUrls;
+  final DateTime tokenExpirationTime;
   @override
   List<Object> get props => [url, mediasUrls];
 }

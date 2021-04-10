@@ -31,8 +31,12 @@ class InstagramRepository {
     'username',
     'timestamp'
   ];
+  Duration tokenLife = const Duration(
+    hours: 1,
+  );
 
   String? authorizationCode;
+  DateTime? accessTokenExpirationTime; // Assumes tokens last for tokenLife
   String? accessToken;
   String? userID;
   Map<String, String>? instaProfile;
@@ -60,7 +64,14 @@ class InstagramRepository {
     });
     accessToken = json.decode(response.body)['access_token'].toString();
     userID = json.decode(response.body)['user_id'].toString();
-    return (accessToken != null && userID != null) ? true : false;
+    if (accessToken != null && userID != null) {
+      accessTokenExpirationTime = DateTime.now().add(
+        tokenLife,
+      );
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<bool> getUserProfile() async {
