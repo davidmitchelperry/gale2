@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_firebase_login/app.dart';
 import 'package:flutter_firebase_login/simple_bloc_observer.dart';
 import 'package:instagram_repository/instagram_repository.dart';
+import 'package:post_repository/post_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,5 +17,6 @@ void main() async {
   runApp(App(
     authenticationRepository: AuthenticationRepository(),
     instagramRepository: InstagramRepository(),
+    postRepository: FirebasePostRepository(),
   ));
 }

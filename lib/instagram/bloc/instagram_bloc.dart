@@ -7,7 +7,6 @@ import 'package:flutter_firebase_login/instagram/bloc/bloc.dart';
 import 'package:instagram_repository/instagram_repository.dart';
 
 part 'instagram_event.dart';
-
 part 'instagram_state.dart';
 
 class InstagramBloc extends Bloc<InstagramEvent, InstagramState> {

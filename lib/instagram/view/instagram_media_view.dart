@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
 import 'package:flutter_firebase_login/instagram/instagram.dart';
+import 'package:flutter_firebase_login/post/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:post_repository/post_repository.dart';
 
 class InstagramMediaView extends StatelessWidget {
   static Route route() {
@@ -57,7 +60,16 @@ class InstagramMediaView extends StatelessWidget {
                     ),
                     fit: BoxFit.contain,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        var p = Post(
+                          platform: 'instagram',
+                          type: 'picture',
+                          sourceUrl: mediasUrls[index],
+                        );
+                        Navigator.of(context).push<Post>(MaterialPageRoute(
+                          builder: (context) => PostPage(p),
+                        ));
+                      },
                     ),
                   ),
                 ));

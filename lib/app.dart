@@ -8,17 +8,21 @@ import 'package:flutter_firebase_login/home/home.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 import 'package:flutter_firebase_login/splash/splash.dart';
 import 'package:flutter_firebase_login/theme.dart';
+import 'package:post_repository/post_repository.dart';
+import 'package:flutter_firebase_login/post/post.dart';
 
 class App extends StatelessWidget {
   const App({
     Key? key,
     required this.authenticationRepository,
     required this.instagramRepository,
+    required this.postRepository,
   })   : assert(authenticationRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final InstagramRepository instagramRepository;
+  final PostRepository postRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +34,9 @@ class App extends StatelessWidget {
         RepositoryProvider.value(
           value: instagramRepository,
         ),
+        RepositoryProvider.value(
+          value: postRepository,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -40,6 +47,10 @@ class App extends StatelessWidget {
           BlocProvider<InstagramBloc>(
               create: (_) => InstagramBloc(
                     instagramRepository: instagramRepository,
+                  )),
+          BlocProvider<PostBloc>(
+              create: (_) => PostBloc(
+                    postRepository: postRepository,
                   )),
         ],
         child: AppView(),
