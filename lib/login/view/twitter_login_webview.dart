@@ -26,10 +26,11 @@ class TwitterLoginWebView extends StatelessWidget {
       },
       onPageFinished: (String url) {
         print('Page finished loading: $url');
-        if (url.startsWith('https://davidmitchelperry.com/auth/')) {
+        if (url.startsWith('https://www.davidmitchelperry.com/auth/')) {
           final queryParameters = Uri.parse(url).queryParameters;
           final oauthToken = queryParameters['oauth_token'];
           final oauthVerifier = queryParameters['oauth_verifier'];
+          //Navigator.of(context).pushAndRemoveUntil(newRoute, (route) => false)
           Navigator.of(context).pop<TwitterUserInfo>(
               TwitterUserInfo(oauthToken ?? '', oauthVerifier ?? ''));
         }
