@@ -118,12 +118,13 @@ class PostPage extends StatelessWidget {
               ),
               icon: const Icon(FontAwesomeIcons.piedPiper, color: Colors.white),
               onPressed: () async {
-                var p = post.copyWith(
-                  title: myTitle,
-                );
-                await postRepo.createPost(user.id, p).then((Post p) {
-                  print('Posted: $p');
-                });
+                postRepo.sendVerifiedRequest();
+                //var p = post.copyWith(
+                //  title: myTitle,
+                //);
+                //await postRepo.createPost(user.id, p).then((Post p) {
+                //  print('Posted: $p');
+                //});
               },
             ),
             //CachedNetworkImage(

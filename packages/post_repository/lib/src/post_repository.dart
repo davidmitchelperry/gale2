@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:post_repository/post_repository.dart';
-import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:post_repository/src/models/models.dart';
 
 abstract class PostRepository {
   Future<Post> createPost(String userid, Post post);
+  void sendVerifiedRequest();
 
   //Stream<Users> users(String userid);
 
