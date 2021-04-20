@@ -7,14 +7,17 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:instagram_repository/instagram_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class InstagramRepository {
-  // [clientID], [appSecret], [redirectUri] from your facebook developer basic display panel.
+  InstagramRepository({
+    firebase_auth.FirebaseAuth? firebaseAuth,
+  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  final firebase_auth.FirebaseAuth _firebaseAuth;
+  // [clientID], [redirectUri] from your facebook developer basic display panel.
   // [scope] choose what kind of data you're wishing to get.
-  // [responseType] I recommend only 'code', I try on DEV MODE with token, it wasn't working.
   // [url] simply the url used to communicate with Instagram API at the beginning.
   static const String clientID = "860843208094582";
-  static const String appSecret = "fd786307df2f5b28d725534f8cc90165";
   static const String redirectUri = 'https://www.davidmitchelperry.com/auth/';
   static const String scope = 'user_profile,user_media';
   static const String responseType = 'code';
@@ -49,21 +52,26 @@ class InstagramRepository {
         url.replaceAll('${redirectUri}?code=', '').replaceAll('#_', '');
   }
 
-  Future<bool> getTokenAndUserID() async {
-    var url = Uri.parse('https://api.instagram.com/oauth/access_token');
-
-    /// Request token.
-    /// Set token.
-    /// Returning status request as bool.
-    final response = await http.post(url, body: {
-      'client_id': clientID,
-      'redirect_uri': redirectUri,
-      'client_secret': appSecret,
-      'code': authorizationCode,
-      'grant_type': 'authorization_code'
+  Future<AuthInfoResponse> _getAuthInfo() async {
+    String? accessToken, userID;
+    await _firebaseAuth.currentUser?.getIdToken().then((idToken) async {
+      var headers = {'Authorization': 'Bearer ' + idToken};
+      final response = await http.post(
+        Uri.parse('https://gale-648cf.uc.r.appspot.com/firebase/'),
+        headers: headers,
+        body: {'authorizationCode': authorizationCode},
+      );
+      dynamic payload = json.decode(response.body);
+      accessToken = payload['access_token'].toString();
+      userID = payload['user_id'].toString();
     });
-    accessToken = json.decode(response.body)['access_token'].toString();
-    userID = json.decode(response.body)['user_id'].toString();
+    return AuthInfoResponse(accessToken, userID);
+  }
+
+  Future<bool> getTokenAndUserID() async {
+    var response = await _getAuthInfo();
+    accessToken = response.accessToken;
+    userID = response.userID;
     if (accessToken != null && userID != null) {
       accessTokenExpirationTime = DateTime.now().add(
         tokenLife,
