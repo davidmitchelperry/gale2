@@ -57,7 +57,8 @@ class InstagramRepository {
     await _firebaseAuth.currentUser?.getIdToken().then((idToken) async {
       var headers = {'Authorization': 'Bearer ' + idToken};
       final response = await http.post(
-        Uri.parse('https://gale-648cf.uc.r.appspot.com/firebase/'),
+        //Uri.parse('https://gale-648cf.uc.r.appspot.com/firebase/'),
+        Uri.parse('http://192.168.1.190:8080/firebase/'),
         headers: headers,
         body: {'authorizationCode': authorizationCode},
       );
