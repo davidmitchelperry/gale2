@@ -15,6 +15,22 @@ class FirebasePostRepository implements PostRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final _profileCollection = FirebaseFirestore.instance.collection('profiles');
 
+  void sendPostRequest(String userid, Post post) async {
+    await _firebaseAuth.currentUser?.getIdToken().then((idToken) async {
+      var headers = {'Authorization': 'Bearer ' + idToken};
+      final response = await http.post(
+        Uri.parse('http://192.168.1.190:8080/post/'),
+        headers: headers,
+        body: post.toEntity().toJson(),
+      );
+      print(response.body);
+      //dynamic payload = json.decode(response.body);
+      //accessToken = payload['access_token'].toString();
+      //userID = payload['user_id'].toString();
+    });
+    //return AuthInfoResponse(accessToken, userID);
+  }
+
   void sendVerifiedRequest() async {
     await _firebaseAuth.currentUser?.getIdToken().then((idToken) async {
       var headers = {'Authorization': 'Bearer ' + idToken};

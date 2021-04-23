@@ -7,6 +7,8 @@ abstract class PostRepository {
   Future<Post> createPost(String userid, Post post);
   void sendVerifiedRequest();
 
+  void sendPostRequest(String userid, Post post) {}
+
   //Stream<Users> users(String userid);
 
   //Stream<MessageHistory> getChatStream(String myUserId, String theirUserId);

@@ -118,7 +118,12 @@ class PostPage extends StatelessWidget {
               ),
               icon: const Icon(FontAwesomeIcons.piedPiper, color: Colors.white),
               onPressed: () async {
-                postRepo.sendVerifiedRequest();
+                var p = post.copyWith(
+                  title: myTitle,
+                );
+                postRepo.sendPostRequest(user.id, p);
+                //postRepo.sendVerifiedRequest();
+                //postRepo
                 //var p = post.copyWith(
                 //  title: myTitle,
                 //);
