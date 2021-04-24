@@ -13,6 +13,7 @@ class PostEntity extends Equatable {
     required this.sourceUrl,
     this.title,
     this.storageUrl,
+    this.error,
   });
 
   final String? id;
@@ -21,14 +22,22 @@ class PostEntity extends Equatable {
   final String sourceUrl;
   final String? title;
   final String? storageUrl;
+  final String? error;
 
   @override
-  List<Object> get props =>
-      [id ?? '', platform, type, sourceUrl, title ?? '', storageUrl ?? ''];
+  List<Object> get props => [
+        id ?? '',
+        platform,
+        type,
+        sourceUrl,
+        title ?? '',
+        storageUrl ?? '',
+        error ?? '',
+      ];
 
   @override
   String toString() {
-    return 'PostEntity { id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl }';
+    return 'PostEntity { id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, error: $error }';
   }
 
   Map<String, String> toMap() {
@@ -39,6 +48,7 @@ class PostEntity extends Equatable {
       'sourceUrl': sourceUrl,
       'title': title ?? '',
       'storageUrl': storageUrl ?? '',
+      'error': error ?? '',
     };
   }
 
@@ -50,18 +60,19 @@ class PostEntity extends Equatable {
       sourceUrl: map['sourceUrl'] ?? '',
       title: map['title'] ?? '',
       storageUrl: map['storageUrl'] ?? '',
+      error: map['error'] ?? '',
     );
   }
 
-  static PostEntity fromSnapshot(DocumentSnapshot snap) {
-    // `snap` is a snapshot for the collection, thus we must index it
-    return PostEntity(
-      id: snap.data()?['id'] as String,
-      platform: snap.data()?['platform'] as String,
-      type: snap.data()?['type'] as String,
-      sourceUrl: snap.data()?['sourceUrl'] as String,
-      title: snap.data()?['title'] as String,
-      storageUrl: snap.data()?['storageUrl'] as String,
-    );
-  }
+  //static PostEntity fromSnapshot(DocumentSnapshot snap) {
+  //  // `snap` is a snapshot for the collection, thus we must index it
+  //  return PostEntity(
+  //    id: snap.data()?['id'] as String,
+  //    platform: snap.data()?['platform'] as String,
+  //    type: snap.data()?['type'] as String,
+  //    sourceUrl: snap.data()?['sourceUrl'] as String,
+  //    title: snap.data()?['title'] as String,
+  //    storageUrl: snap.data()?['storageUrl'] as String,
+  //  );
+  //}
 }

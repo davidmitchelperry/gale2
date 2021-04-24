@@ -65,20 +65,21 @@ class FirebasePostRepository implements PostRepository {
     return result;
   }
 
+  // TODO: Add Error Handling for this request
   @override
   Future<Post> sendCreatePostRequest(String userid, Post post) async {
-    var responseKeys = <String>[
-      'id',
-      'platform',
-      'type',
-      'sourceUrl',
-      'title',
-      'storageUrl',
-    ];
     var response = await sendAuthorizedRequest(
       post.toEntity().toMap(),
       'createPost',
-      responseKeys,
+      [
+        'id',
+        'platform',
+        'type',
+        'sourceUrl',
+        'title',
+        'storageUrl',
+        'error',
+      ],
     );
     var result = Post.fromEntity(PostEntity.fromMap(response));
     print("sendCreatePostRequest");

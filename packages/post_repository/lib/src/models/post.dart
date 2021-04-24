@@ -10,6 +10,7 @@ class Post {
     required this.sourceUrl,
     this.title,
     this.storageUrl,
+    this.error,
   });
   final String? id;
   final String platform;
@@ -17,6 +18,7 @@ class Post {
   final String sourceUrl;
   final String? title;
   final String? storageUrl;
+  final String? error;
 
   Post copyWith({
     String? id,
@@ -25,6 +27,7 @@ class Post {
     String? sourceUrl,
     String? title,
     String? storageUrl,
+    String? error,
   }) {
     return Post(
       id: id ?? this.id,
@@ -33,6 +36,7 @@ class Post {
       sourceUrl: sourceUrl ?? this.sourceUrl,
       title: title ?? this.title,
       storageUrl: storageUrl ?? this.storageUrl,
+      error: error ?? this.error,
     );
   }
 
@@ -43,7 +47,8 @@ class Post {
       type.hashCode ^
       sourceUrl.hashCode ^
       title.hashCode ^
-      storageUrl.hashCode;
+      storageUrl.hashCode ^
+      error.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -55,11 +60,12 @@ class Post {
           type == other.type &&
           sourceUrl == other.sourceUrl &&
           title == other.title &&
-          storageUrl == other.storageUrl;
+          storageUrl == other.storageUrl &&
+          error == other.error;
 
   @override
   String toString() {
-    return 'Post{ id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl }';
+    return 'Post{ id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, error: $error }';
   }
 
   PostEntity toEntity() {
@@ -70,6 +76,7 @@ class Post {
       sourceUrl: sourceUrl,
       title: title,
       storageUrl: storageUrl,
+      error: error,
     );
   }
 
@@ -81,6 +88,7 @@ class Post {
       sourceUrl: entity.sourceUrl,
       title: entity.title,
       storageUrl: entity.storageUrl,
+      error: entity.error,
     );
   }
 }
