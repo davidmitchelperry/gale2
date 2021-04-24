@@ -48,15 +48,20 @@ class FirebasePostRepository implements PostRepository {
 
   @override
   Future<Profile> sendCreateProfileRequest(String userid) async {
+    print("sendCreateProfileRequest");
     var profile = Profile(
       id: userid,
     );
     var response = await sendAuthorizedRequest(
       profile.toEntity().toMap(),
       'createProfile',
-      ['userid'],
+      [
+        'id',
+        'error',
+      ],
     );
     var result = Profile.fromEntity(ProfileEntity.fromMap(response));
+    print(result);
     return result;
   }
 
@@ -72,10 +77,11 @@ class FirebasePostRepository implements PostRepository {
     ];
     var response = await sendAuthorizedRequest(
       post.toEntity().toMap(),
-      'post',
+      'createPost',
       responseKeys,
     );
     var result = Post.fromEntity(PostEntity.fromMap(response));
+    print("sendCreatePostRequest");
     print(result);
     return result;
   }

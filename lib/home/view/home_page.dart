@@ -80,7 +80,9 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 color: const Color(0xFFFFD600),
-                onPressed: () {}),
+                onPressed: () {
+                  postRepo.sendCreateProfileRequest(user.id);
+                }),
             Text(mediasUrls.toString()),
           ],
         ),

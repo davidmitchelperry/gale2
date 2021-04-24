@@ -8,27 +8,34 @@ import 'package:equatable/equatable.dart';
 class ProfileEntity extends Equatable {
   const ProfileEntity({
     this.id,
+    this.error,
   });
 
   final String? id;
+  final String? error;
 
   @override
-  List<Object> get props => [id ?? ''];
+  List<Object> get props => [
+        id ?? '',
+        error ?? '',
+      ];
 
   @override
   String toString() {
-    return 'Profile { id: $id }';
+    return 'Profile { id: $id, error: $error }';
   }
 
   Map<String, String> toMap() {
     return {
       'id': id ?? '',
+      'error': error ?? '',
     };
   }
 
   static ProfileEntity fromMap(Map<String, String> map) {
     return ProfileEntity(
       id: map['id'] ?? '',
+      error: map['error'] ?? '',
     );
   }
 
