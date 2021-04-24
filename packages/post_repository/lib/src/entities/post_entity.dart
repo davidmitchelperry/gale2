@@ -31,7 +31,7 @@ class PostEntity extends Equatable {
     return 'PostEntity { id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl }';
   }
 
-  Map<String, Object> toJson() {
+  Map<String, String> toMap() {
     return {
       'id': id ?? '',
       'platform': platform,
@@ -40,6 +40,17 @@ class PostEntity extends Equatable {
       'title': title ?? '',
       'storageUrl': storageUrl ?? '',
     };
+  }
+
+  static PostEntity fromMap(Map<String, String> map) {
+    return PostEntity(
+      id: map['id'],
+      platform: map['platform'] ?? '',
+      type: map['type'] ?? '',
+      sourceUrl: map['sourceUrl'] ?? '',
+      title: map['title'] ?? '',
+      storageUrl: map['storageUrl'] ?? '',
+    );
   }
 
   static PostEntity fromSnapshot(DocumentSnapshot snap) {

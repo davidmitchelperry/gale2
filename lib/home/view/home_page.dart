@@ -14,6 +14,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    var postRepo = context.select((PostBloc bloc) => bloc.postRepository);
     final instagramState =
         context.select((InstagramBloc bloc) => bloc.state); // INIT THE WEBVIEW
     late final List<String> mediasUrls;
@@ -73,6 +74,13 @@ class HomePage extends StatelessWidget {
                     );
                   }
                 }),
+            RaisedButton(
+                child: const Text('Create Profile Request'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: const Color(0xFFFFD600),
+                onPressed: () {}),
             Text(mediasUrls.toString()),
           ],
         ),

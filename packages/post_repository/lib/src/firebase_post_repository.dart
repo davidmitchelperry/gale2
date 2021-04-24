@@ -1,12 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:post_repository/post_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'entities/entities.dart';
 import 'package:http/http.dart' as http;
+import 'package:post_repository/post_repository.dart';
+import 'package:post_repository/src/models/profile.dart';
 
 class FirebasePostRepository implements PostRepository {
   FirebasePostRepository({
@@ -15,45 +14,84 @@ class FirebasePostRepository implements PostRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final _profileCollection = FirebaseFirestore.instance.collection('profiles');
 
-  void sendPostRequest(String userid, Post post) async {
-    await _firebaseAuth.currentUser?.getIdToken().then((idToken) async {
+  @override
+  Future<Map<String, String>> sendAuthorizedRequest(
+    Object toPost,
+    String subUrl,
+    List<String> responseKeys,
+  ) async {
+    // Get the user's id token
+    var postResponse =
+        await _firebaseAuth.currentUser?.getIdToken().then((idToken) async {
+      // attach token to the header
       var headers = {'Authorization': 'Bearer ' + idToken};
+      if (!subUrl.endsWith('/')) {
+        subUrl += '/';
+      }
+      // Send Post request
       final response = await http.post(
-        Uri.parse('http://192.168.1.190:8080/post/'),
+        Uri.parse('http://192.168.1.190:8080/$subUrl'),
         headers: headers,
-        body: post.toEntity().toJson(),
+        body: toPost,
       );
-      print(response.body);
-      //dynamic payload = json.decode(response.body);
-      //accessToken = payload['access_token'].toString();
-      //userID = payload['user_id'].toString();
+      return response;
     });
-    //return AuthInfoResponse(accessToken, userID);
-  }
-
-  void sendVerifiedRequest() async {
-    await _firebaseAuth.currentUser?.getIdToken().then((idToken) async {
-      var headers = {'Authorization': 'Bearer ' + idToken};
-      final response = await http.get(
-          Uri.parse('https://gale-648cf.uc.r.appspot.com/firebase/'),
-          headers: headers);
-      print(response.body);
-    });
-    //final dynamic mediasList = json.decode(responseMedia.body);
+    // TODO: This likely needs to be in a try/catch?
+    // Decode the response body and build result
+    dynamic postObj = json.decode(postResponse?.body ?? '');
+    var postResult = <String, String>{};
+    for (var key in responseKeys) {
+      postResult[key] = postObj[key].toString();
+    }
+    return postResult;
   }
 
   @override
-  Future<Post> createPost(String userid, Post post) async {
-    late Post result;
-    await _profileCollection
-        .doc(userid)
-        .collection('posts')
-        .add(post.toEntity().toJson())
-        .then((docRef) {
-      result = post.copyWith(id: docRef.id);
-    });
-
+  Future<Profile> sendCreateProfileRequest(String userid) async {
+    var profile = Profile(
+      id: userid,
+    );
+    var response = await sendAuthorizedRequest(
+      profile.toEntity().toMap(),
+      'createProfile',
+      ['userid'],
+    );
+    var result = Profile.fromEntity(ProfileEntity.fromMap(response));
     return result;
-    //return Post.fromEntity(PostEntity.fromSnapshot(await postResult.get()));
   }
+
+  @override
+  Future<Post> sendCreatePostRequest(String userid, Post post) async {
+    var responseKeys = <String>[
+      'id',
+      'platform',
+      'type',
+      'sourceUrl',
+      'title',
+      'storageUrl',
+    ];
+    var response = await sendAuthorizedRequest(
+      post.toEntity().toMap(),
+      'post',
+      responseKeys,
+    );
+    var result = Post.fromEntity(PostEntity.fromMap(response));
+    print(result);
+    return result;
+  }
+
+//@override
+//Future<Post> createPost(String userid, Post post) async {
+//  late Post result;
+//  await _profileCollection
+//      .doc(userid)
+//      .collection('posts')
+//      .add(post.toEntity().toJson())
+//      .then((docRef) {
+//    result = post.copyWith(id: docRef.id);
+//  });
+
+//  return result;
+//  //return Post.fromEntity(PostEntity.fromSnapshot(await postResult.get()));
+//}
 }

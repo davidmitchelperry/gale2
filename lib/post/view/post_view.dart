@@ -121,15 +121,7 @@ class PostPage extends StatelessWidget {
                 var p = post.copyWith(
                   title: myTitle,
                 );
-                postRepo.sendPostRequest(user.id, p);
-                //postRepo.sendVerifiedRequest();
-                //postRepo
-                //var p = post.copyWith(
-                //  title: myTitle,
-                //);
-                //await postRepo.createPost(user.id, p).then((Post p) {
-                //  print('Posted: $p');
-                //});
+                await postRepo.sendCreatePostRequest(user.id, p);
               },
             ),
             //CachedNetworkImage(

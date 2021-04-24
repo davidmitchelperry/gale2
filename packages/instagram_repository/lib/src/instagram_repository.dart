@@ -56,12 +56,16 @@ class InstagramRepository {
     String? accessToken, userID;
     await _firebaseAuth.currentUser?.getIdToken().then((idToken) async {
       var headers = {'Authorization': 'Bearer ' + idToken};
+      print("INSTAGRAM LOG");
+      print(Uri.parse('http://192.168.1.190:8080/firebase/'));
       final response = await http.post(
         //Uri.parse('https://gale-648cf.uc.r.appspot.com/firebase/'),
         Uri.parse('http://192.168.1.190:8080/firebase/'),
         headers: headers,
         body: {'authorizationCode': authorizationCode},
       );
+      print("INSTAGRAM LOG:");
+      print(response.body);
       dynamic payload = json.decode(response.body);
       accessToken = payload['access_token'].toString();
       userID = payload['user_id'].toString();

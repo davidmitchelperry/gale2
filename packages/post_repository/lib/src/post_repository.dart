@@ -4,10 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:post_repository/src/models/models.dart';
 
 abstract class PostRepository {
-  Future<Post> createPost(String userid, Post post);
-  void sendVerifiedRequest();
+  //Future<Post> createPost(String userid, Post post);
+  Future<Map<String, String>> sendAuthorizedRequest(
+      Object body, String subUrl, List<String> responseKeys);
 
-  void sendPostRequest(String userid, Post post) {}
+  Future<Post> sendCreatePostRequest(String userid, Post post);
+
+  Future<Profile> sendCreateProfileRequest(String userid);
 
   //Stream<Users> users(String userid);
 
