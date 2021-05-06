@@ -65,6 +65,7 @@ class InstagramMediaView extends StatelessWidget {
                           platform: 'instagram',
                           type: 'picture',
                           sourceUrl: mediasUrls[index],
+                          categories: "cat1, cat2",
                         );
                         Navigator.of(context).push<Post>(MaterialPageRoute(
                           builder: (context) => PostPage(p),

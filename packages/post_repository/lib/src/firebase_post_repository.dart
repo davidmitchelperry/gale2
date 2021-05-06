@@ -78,6 +78,7 @@ class FirebasePostRepository implements PostRepository {
         'sourceUrl',
         'title',
         'storageUrl',
+        'categories',
         'error',
       ],
     );

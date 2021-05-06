@@ -13,6 +13,7 @@ class PostEntity extends Equatable {
     required this.sourceUrl,
     this.title,
     this.storageUrl,
+    this.categories,
     this.error,
   });
 
@@ -22,6 +23,7 @@ class PostEntity extends Equatable {
   final String sourceUrl;
   final String? title;
   final String? storageUrl;
+  final String? categories;
   final String? error;
 
   @override
@@ -33,11 +35,12 @@ class PostEntity extends Equatable {
         title ?? '',
         storageUrl ?? '',
         error ?? '',
+        categories ?? '',
       ];
 
   @override
   String toString() {
-    return 'PostEntity { id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, error: $error }';
+    return 'PostEntity { id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, categories: $categories, error: $error }';
   }
 
   Map<String, String> toMap() {
@@ -48,6 +51,7 @@ class PostEntity extends Equatable {
       'sourceUrl': sourceUrl,
       'title': title ?? '',
       'storageUrl': storageUrl ?? '',
+      'categories': categories ?? '',
       'error': error ?? '',
     };
   }
@@ -60,6 +64,7 @@ class PostEntity extends Equatable {
       sourceUrl: map['sourceUrl'] ?? '',
       title: map['title'] ?? '',
       storageUrl: map['storageUrl'] ?? '',
+      categories: map['categories'] ?? '',
       error: map['error'] ?? '',
     );
   }

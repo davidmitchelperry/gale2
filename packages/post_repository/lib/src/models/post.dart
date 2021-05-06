@@ -10,8 +10,10 @@ class Post {
     required this.sourceUrl,
     this.title,
     this.storageUrl,
+    this.categories,
     this.error,
   });
+
   final String? id;
   final String platform;
   final String type;
@@ -19,6 +21,7 @@ class Post {
   final String? title;
   final String? storageUrl;
   final String? error;
+  final String? categories;
 
   Post copyWith({
     String? id,
@@ -27,6 +30,7 @@ class Post {
     String? sourceUrl,
     String? title,
     String? storageUrl,
+    String? categories,
     String? error,
   }) {
     return Post(
@@ -36,6 +40,7 @@ class Post {
       sourceUrl: sourceUrl ?? this.sourceUrl,
       title: title ?? this.title,
       storageUrl: storageUrl ?? this.storageUrl,
+      categories: categories ?? this.categories,
       error: error ?? this.error,
     );
   }
@@ -48,7 +53,8 @@ class Post {
       sourceUrl.hashCode ^
       title.hashCode ^
       storageUrl.hashCode ^
-      error.hashCode;
+      error.hashCode ^
+      categories.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -61,11 +67,12 @@ class Post {
           sourceUrl == other.sourceUrl &&
           title == other.title &&
           storageUrl == other.storageUrl &&
+          categories == other.categories &&
           error == other.error;
 
   @override
   String toString() {
-    return 'Post{ id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, error: $error }';
+    return 'Post{ id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, categories: $categories, error: $error }';
   }
 
   PostEntity toEntity() {
@@ -76,6 +83,7 @@ class Post {
       sourceUrl: sourceUrl,
       title: title,
       storageUrl: storageUrl,
+      categories: categories,
       error: error,
     );
   }
@@ -88,6 +96,7 @@ class Post {
       sourceUrl: entity.sourceUrl,
       title: entity.title,
       storageUrl: entity.storageUrl,
+      categories: entity.categories,
       error: entity.error,
     );
   }
