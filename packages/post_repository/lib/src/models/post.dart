@@ -11,7 +11,8 @@ class Post {
     this.title,
     this.storageUrl,
     this.categories,
-    this.error,
+    this.errorCode,
+    this.errorMsg,
   });
 
   final String? id;
@@ -20,8 +21,9 @@ class Post {
   final String sourceUrl;
   final String? title;
   final String? storageUrl;
-  final String? error;
   final String? categories;
+  final String? errorCode;
+  final String? errorMsg;
 
   Post copyWith({
     String? id,
@@ -31,7 +33,8 @@ class Post {
     String? title,
     String? storageUrl,
     String? categories,
-    String? error,
+    String? errorCode,
+    String? errorMsg,
   }) {
     return Post(
       id: id ?? this.id,
@@ -41,7 +44,8 @@ class Post {
       title: title ?? this.title,
       storageUrl: storageUrl ?? this.storageUrl,
       categories: categories ?? this.categories,
-      error: error ?? this.error,
+      errorCode: errorCode ?? this.errorCode,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 
@@ -53,7 +57,8 @@ class Post {
       sourceUrl.hashCode ^
       title.hashCode ^
       storageUrl.hashCode ^
-      error.hashCode ^
+      errorCode.hashCode ^
+      errorMsg.hashCode ^
       categories.hashCode;
 
   @override
@@ -68,11 +73,12 @@ class Post {
           title == other.title &&
           storageUrl == other.storageUrl &&
           categories == other.categories &&
-          error == other.error;
+          errorMsg == other.errorMsg &&
+          errorCode == other.errorCode;
 
   @override
   String toString() {
-    return 'Post{ id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, categories: $categories, error: $error }';
+    return 'Post{ id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, categories: $categories, errorCode: $errorCode, errorMsg: $errorMsg, }';
   }
 
   PostEntity toEntity() {
@@ -84,7 +90,8 @@ class Post {
       title: title,
       storageUrl: storageUrl,
       categories: categories,
-      error: error,
+      errorCode: errorCode,
+      errorMsg: errorMsg,
     );
   }
 
@@ -97,7 +104,8 @@ class Post {
       title: entity.title,
       storageUrl: entity.storageUrl,
       categories: entity.categories,
-      error: entity.error,
+      errorCode: entity.errorCode,
+      errorMsg: entity.errorMsg,
     );
   }
 }

@@ -79,7 +79,8 @@ class FirebasePostRepository implements PostRepository {
         'title',
         'storageUrl',
         'categories',
-        'error',
+        'errorCode',
+        'errorMsg',
       ],
     );
     var result = Post.fromEntity(PostEntity.fromMap(response));

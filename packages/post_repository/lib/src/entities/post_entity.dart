@@ -14,7 +14,8 @@ class PostEntity extends Equatable {
     this.title,
     this.storageUrl,
     this.categories,
-    this.error,
+    this.errorCode,
+    this.errorMsg,
   });
 
   final String? id;
@@ -24,7 +25,8 @@ class PostEntity extends Equatable {
   final String? title;
   final String? storageUrl;
   final String? categories;
-  final String? error;
+  final String? errorCode;
+  final String? errorMsg;
 
   @override
   List<Object> get props => [
@@ -34,13 +36,14 @@ class PostEntity extends Equatable {
         sourceUrl,
         title ?? '',
         storageUrl ?? '',
-        error ?? '',
         categories ?? '',
+        errorCode ?? '',
+        errorMsg ?? '',
       ];
 
   @override
   String toString() {
-    return 'PostEntity { id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, categories: $categories, error: $error }';
+    return 'PostEntity { id: $id, platform: $platform, type: $type, sourceUrl: $sourceUrl, title: $title, storageUrl: $storageUrl, categories: $categories, errorCode: $errorCode, errorMsg: $errorMsg }';
   }
 
   Map<String, String> toMap() {
@@ -52,7 +55,8 @@ class PostEntity extends Equatable {
       'title': title ?? '',
       'storageUrl': storageUrl ?? '',
       'categories': categories ?? '',
-      'error': error ?? '',
+      'errorCode': errorCode ?? '',
+      'errorMsg': errorMsg ?? '',
     };
   }
 
@@ -65,7 +69,8 @@ class PostEntity extends Equatable {
       title: map['title'] ?? '',
       storageUrl: map['storageUrl'] ?? '',
       categories: map['categories'] ?? '',
-      error: map['error'] ?? '',
+      errorCode: map['errorCode'] ?? '',
+      errorMsg: map['errorMsg'] ?? '',
     );
   }
 
