@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
@@ -82,6 +84,22 @@ class HomePage extends StatelessWidget {
                 color: const Color(0xFFFFD600),
                 onPressed: () {
                   postRepo.sendCreateProfileRequest(user.id);
+                }),
+            RaisedButton(
+                child: const Text('Get Content Block Request'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: const Color(0xFFFFD600),
+                onPressed: () async {
+                  var cb = await postRepo.sendContentBlockRequest();
+                  var vpList = cb.votingPairsMap?.values ?? [];
+                  for (var vp in vpList) {
+                    print(vp.id);
+                    print(vp.post1Id);
+                    print(vp.post2Id);
+                    print(vp.vote);
+                  }
                 }),
             Text(mediasUrls.toString()),
           ],

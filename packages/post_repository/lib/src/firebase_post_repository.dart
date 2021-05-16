@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:http/http.dart' as http;
 import 'package:post_repository/post_repository.dart';
-import 'package:post_repository/src/models/profile.dart';
+//import 'package:post_repository/src/models/profile.dart';
 
 class FirebasePostRepository implements PostRepository {
   FirebasePostRepository({
@@ -89,6 +89,26 @@ class FirebasePostRepository implements PostRepository {
     return result;
   }
 
+  @override
+  Future<ContentBlock> sendContentBlockRequest() async {
+    var cb = ContentBlock(categories: ['cat1', 'cat3']);
+    // TODO: Create a content block request class
+    var response = await sendAuthorizedRequest(
+      cb.toEntity().toMap(),
+      'getContentBlock',
+      [
+        'id',
+        'categories',
+        'votingPairsMap',
+        'errorCode',
+        'errorMsg',
+      ],
+    );
+    var result = ContentBlock.fromEntity(ContentBlockEntity.fromMap(response));
+    print("sendContentBlockRequest");
+    print(result);
+    return result;
+  }
 //@override
 //Future<Post> createPost(String userid, Post post) async {
 //  late Post result;

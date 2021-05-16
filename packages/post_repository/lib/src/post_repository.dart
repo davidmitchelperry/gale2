@@ -12,6 +12,8 @@ abstract class PostRepository {
 
   Future<Profile> sendCreateProfileRequest(String userid);
 
+  Future<ContentBlock> sendContentBlockRequest();
+
   //Stream<Users> users(String userid);
 
   //Stream<MessageHistory> getChatStream(String myUserId, String theirUserId);
